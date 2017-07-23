@@ -3,8 +3,7 @@
  */
 
 %{
-/* need this for the call to getlogin() below */
-#include <unistd.h>
+    // includes
 %}
 
 DIGIT   [0-9]
@@ -12,6 +11,7 @@ WORD    [a-zA-Z]
 MULTI_LINE_COMMENT_START  \(\*
 MULTI_LINE_COMMENT_END    \*\)
 WHITESPACE  [ \n\f\r\t\v]
+IDENTIFIER  [a-zA-Z0-9_]
 
 %START  STRING_LITERAL COMMENT MULTI_LINE_COMMENT
 
@@ -20,7 +20,9 @@ WHITESPACE  [ \n\f\r\t\v]
 
     /* keywords are case-insensitive... */
 (?i:class|else|fi|if|in|inherits|isvoid|let|loop|pool|then|while|case|esac|new|of|not) {
-    printf("keyword\n");
+    printf("keyword: ");
+    ECHO;
+    printf("\n");
 }
 
     /* ...except true / false, whose first character must be lowercase */
@@ -29,6 +31,26 @@ t(?i:rue) {
 }
 f(?i:alse) {
     printf("false found\n");
+}
+
+    /* Integers ================================= */
+{DIGIT}+ {
+    printf("integer found: ");
+    ECHO;
+    printf("\n");
+}
+
+    /* Identifiers ============================== */
+[a-z]+{IDENTIFIER}* {
+    printf("identifier found: ");
+    ECHO;
+    printf("\n");
+}
+
+[A-Z]+{IDENTIFIER}* {
+    printf("type identifier found: ");
+    ECHO;
+    printf("\n");
 }
 
     /* Comments ================================= */
@@ -49,7 +71,7 @@ f(?i:alse) {
     /* String literals ========================== */
 
 <STRING_LITERAL>\" BEGIN 0;
-<STRING_LITERAL>[^\"]* {
+<STRING_LITERAL>[^"]* {
     printf("Found string literal: ");
     ECHO;
     printf("\n");

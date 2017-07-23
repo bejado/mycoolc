@@ -65,7 +65,7 @@ f(?i:alse) {
 
     /* Integers ================================= */
 
-{DIGIT}+ {
+{DIGIT}+{WHITESPACE} {
     printf("integer found: ");
     ECHO;
     printf("\n");
@@ -141,6 +141,11 @@ f(?i:alse) {
     /* Whitespace =============================== */
 
 {WHITESPACE}  /* ignore whitespace */
+
+    /* Error handling =========================== */
+. {
+    printf("::ERROR::\n");
+}
 
 %%
 

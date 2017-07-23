@@ -11,11 +11,26 @@ DIGIT   [0-9]
 WORD    [a-zA-Z]
 MULTI_LINE_COMMENT_START  \(\*
 MULTI_LINE_COMMENT_END    \*\)
-WHITESPACE  [ \t\n]
+WHITESPACE  [ \n\f\r\t\v]
 
 %START  STRING_LITERAL COMMENT MULTI_LINE_COMMENT
 
 %%
+    /* Keywords ================================= */
+
+    /* keywords are case-insensitive... */
+(?i:class|else|fi|if|in|inherits|isvoid|let|loop|pool|then|while|case|esac|new|of|not) {
+    printf("keyword\n");
+}
+
+    /* ...except true / false, whose first character must be lowercase */
+t(?i:rue) {
+    printf("true found\n");
+}
+f(?i:alse) {
+    printf("false found\n");
+}
+
     /* Comments ================================= */
 
 <COMMENT>\n {

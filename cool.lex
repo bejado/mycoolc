@@ -103,14 +103,17 @@ f(?i:alse) {
     /* String literals ========================== */
 
 <STRING_LITERAL>\" BEGIN 0;
-<STRING_LITERAL>[^"]* {
-    printf("Found string literal: ");
+<STRING_LITERAL>([^"]*(\\.)?)* {
+    printf("found string literal: ");
     ECHO;
     printf("\n");
 }
 \" BEGIN STRING_LITERAL;
 
+    /* Whitespace =============================== */
+
 {WHITESPACE}  /* ignore whitespace */
+
 %%
 
 main( argc, argv )

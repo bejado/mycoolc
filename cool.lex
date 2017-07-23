@@ -105,6 +105,30 @@ f(?i:alse) {
 <STRING_LITERAL>\" BEGIN 0;
 <STRING_LITERAL>([^"]*(\\.)?)* {
     printf("found string literal: ");
+    char *literal = yytext;
+    char *lookahead;
+    char *copyHead;
+    copyHead = literal;
+
+    while (*copyHead) {
+        if (*copyHead == '\\') {
+            lookahead = copyHead + 1;
+            switch (*lookahead) {
+                case 'b': *lookahead = '\b'; break;
+                case 't': *lookahead = '\t'; break;
+                case 'n': *lookahead = '\n'; break;
+                case 'f': *lookahead = '\f'; break;
+            }
+            copyHead++;
+        }
+        *literal = *copyHead;
+        literal++;
+        copyHead++;
+    }
+    while (literal != copyHead) {
+        *literal = '\0';
+        literal++;
+    }
     ECHO;
     printf("\n");
 }

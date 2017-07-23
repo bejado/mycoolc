@@ -103,7 +103,11 @@ f(?i:alse) {
     /* String literals ========================== */
 
 <STRING_LITERAL>\" BEGIN 0;
-<STRING_LITERAL>([^"]*(\\.)?)* {
+<STRING_LITERAL>\n {
+    printf("::ERROR:: unterminated string literal\n");
+    BEGIN 0;
+}
+<STRING_LITERAL>([^"\n]*(\\.)?)* {
     printf("found string literal: ");
     char *literal = yytext;
     char *lookahead;

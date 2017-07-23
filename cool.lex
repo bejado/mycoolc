@@ -8,8 +8,6 @@
 
 DIGIT   [0-9]
 WORD    [a-zA-Z]
-MULTI_LINE_COMMENT_START  \(\*
-MULTI_LINE_COMMENT_END    \*\)
 WHITESPACE  [ \n\f\r\t\v]
 IDENTIFIER  [a-zA-Z0-9_]
 
@@ -25,6 +23,38 @@ IDENTIFIER  [a-zA-Z0-9_]
     printf("\n");
 }
 
+    /* Special ================================= */
+
+(\{|\}|;|:|(<-)|\.|,|(=>)) {
+    printf("found special notation: ");
+    ECHO;
+    printf("\n");
+}
+
+(\+|-|\*|\/) {
+    printf("found math operator: ");
+    ECHO;
+    printf("\n");
+}
+
+(<|(<=)|=) {
+    printf("found comparison operator: ");
+    ECHO;
+    printf("\n");
+}
+
+(\(|\)) {
+    printf("found parenthesis: ");
+    ECHO;
+    printf("\n");
+}
+
+~ {
+    printf("found not operator");
+    ECHO;
+    printf("\n");
+}
+
     /* ...except true / false, whose first character must be lowercase */
 t(?i:rue) {
     printf("true found\n");
@@ -34,6 +64,7 @@ f(?i:alse) {
 }
 
     /* Integers ================================= */
+
 {DIGIT}+ {
     printf("integer found: ");
     ECHO;
@@ -41,6 +72,7 @@ f(?i:alse) {
 }
 
     /* Identifiers ============================== */
+
 [a-z]+{IDENTIFIER}* {
     printf("identifier found: ");
     ECHO;
